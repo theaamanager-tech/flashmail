@@ -37,9 +37,16 @@ export function getServerEnv(): ServerEnv {
   const anonKey = getRaw("VITE_SUPABASE_ANON_KEY");
   const serviceRole = getRaw("SUPABASE_SERVICE_ROLE_KEY");
 
-  if (!url || !anonKey || !serviceRole) {
+  const missing: string[] = [];
+  if (!url) missing.push("VITE_SUPABASE_URL");
+  if (!anonKey) missing.push("VITE_SUPABASE_ANON_KEY");
+  if (!serviceRole) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (missing.length > 0) {
     throw new Error(
-      "Missing required server environment variables: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY",
+      `Missing required server environment variables: ${missing.join(", ")}. ` +
+      `Available process.env keys: ${typeof process !== "undefined" && process.env ? Object.keys(process.env).filter(k => k.startsWith("VITE_") || k.startsWith("SUPABASE_")).join(", ") : "none"}. ` +
+      `Available globalThis keys: ${typeof globalThis !== "undefined" ? Object.keys(globalThis as unknown as Record<string, unknown>).filter(k => k.startsWith("VITE_") || k.startsWith("SUPABASE_")).join(", ") : "none"}.`,
     );
   }
 
