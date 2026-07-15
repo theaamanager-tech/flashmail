@@ -31,6 +31,9 @@ jobs:
           echo "=== wrangler.json ==="
           cat .output/server/wrangler.json || echo "wrangler.json not found"
 
+      - name: Clean conflicting deploy config
+        run: rm -rf .wrangler/deploy/config.json
+
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
