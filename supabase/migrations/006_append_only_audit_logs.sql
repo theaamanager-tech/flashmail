@@ -19,7 +19,8 @@ begin
 end $$;
 
 -- Create an admin-only policy for any future ALL operations (currently no normal user needs this).
-create policy if not exists "Audit logs admin-only modifications"
+drop policy if exists "Audit logs admin-only modifications" on public.audit_logs;
+create policy "Audit logs admin-only modifications"
   on public.audit_logs for all to authenticated
   using (exists (select 1 from public.profiles where id = auth.uid() and is_admin = true))
   with check (exists (select 1 from public.profiles where id = auth.uid() and is_admin = true));
