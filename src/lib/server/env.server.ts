@@ -17,8 +17,17 @@ export type ServerEnv = {
 };
 
 function getRaw(key: string): string | undefined {
-  if (typeof process !== "undefined" && process.env) {
+  // Node.js / build-time
+  if (typeof process !== "undefined" && process.env && process.env[key] !== undefined) {
     return process.env[key];
+  }
+  // Cloudflare Workers exposes bindings on globalThis
+  if (typeof globalThis !== "undefined" && (globalThis as unknown as Record<string, string>)[key] !== undefined) {
+    return (globalThis as unknown as Record<string, string>)[key];
+  }
+  // Vite-injected env (client + SSR)
+  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key] !== undefined) {
+    return import.meta.env[key] as string;
   }
   return undefined;
 }

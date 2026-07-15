@@ -22,6 +22,9 @@ jobs:
         run: npm install
 
       - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
       - name: Inspect build output
@@ -41,6 +44,11 @@ jobs:
             const path = '.output/server/wrangler.json';
             const config = JSON.parse(fs.readFileSync(path, 'utf8'));
             config.workers_dev = true;
+            config.observability = {
+              enabled: true,
+              head_sampling_rate: 1,
+              logs: { enabled: true, head_sampling_rate: 1 }
+            };
             fs.writeFileSync(path, JSON.stringify(config, null, 2));
           "
 
