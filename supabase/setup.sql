@@ -171,7 +171,7 @@ create table if not exists public.daily_email_usage (
   user_id uuid not null references auth.users(id) on delete cascade,
   date date not null default current_date,
   received_count integer not null default 0,
-  limit integer not null default 500,
+  "limit" integer not null default 500,
   updated_at timestamptz not null default now(),
   unique (user_id, date)
 );
@@ -261,15 +261,15 @@ begin
   perform pg_advisory_xact_lock(v_lock_id);
 
   -- Atomically upsert the daily usage row, guarded by the limit.
-  insert into public.daily_email_usage (user_id, date, received_count, limit)
+  insert into public.daily_email_usage (user_id, date, received_count, "limit")
   values (v_user_id, current_date, 1, v_limit)
   on conflict (user_id, date)
   do update set received_count = public.daily_email_usage.received_count + 1
-  where public.daily_email_usage.received_count < public.daily_email_usage.limit
-  returning public.daily_email_usage.received_count, public.daily_email_usage.limit into v_count, v_limit;
+  where public.daily_email_usage.received_count < public.daily_email_usage."limit"
+  returning public.daily_email_usage.received_count, public.daily_email_usage."limit" into v_count, v_limit;
 
   if v_count is null then
-    select received_count, limit into v_count, v_limit
+    select received_count, "limit" into v_count, v_limit
     from public.daily_email_usage
     where user_id = v_user_id and date = current_date;
     return query select false, v_count, v_limit;
@@ -599,15 +599,15 @@ begin
   v_lock_id := ('x' || substr(md5(v_user_id::text || current_date::text), 1, 16))::bit(64)::bigint;
   perform pg_advisory_xact_lock(v_lock_id);
 
-  insert into public.daily_email_usage (user_id, date, received_count, limit)
+  insert into public.daily_email_usage (user_id, date, received_count, "limit")
   values (v_user_id, current_date, 1, v_limit)
   on conflict (user_id, date)
   do update set received_count = public.daily_email_usage.received_count + 1
-  where public.daily_email_usage.received_count < public.daily_email_usage.limit
-  returning public.daily_email_usage.received_count, public.daily_email_usage.limit into v_count, v_limit;
+  where public.daily_email_usage.received_count < public.daily_email_usage."limit"
+  returning public.daily_email_usage.received_count, public.daily_email_usage."limit" into v_count, v_limit;
 
   if v_count is null then
-    select received_count, limit into v_count, v_limit
+    select received_count, "limit" into v_count, v_limit
     from public.daily_email_usage
     where user_id = v_user_id and date = current_date;
     return query select false, v_count, v_limit;
