@@ -1,0 +1,267 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  /* Ferrari editorial — sharp 0px radius, near-black canvas, Rosso Corsa accent */
+  --radius: 0px;
+
+  /* Canvas: #181818 near-black (never pure black) */
+  --background: #181818;
+  --foreground: #ffffff;
+
+  --card: #303030;
+  --card-foreground: #ffffff;
+
+  --popover: #303030;
+  --popover-foreground: #ffffff;
+
+  /* Rosso Corsa */
+  --primary: #da291c;
+  --primary-foreground: #ffffff;
+  --primary-active: #b01e0a;
+
+  --secondary: #303030;
+  --secondary-foreground: #ffffff;
+
+  --muted: #303030;
+  --muted-foreground: #969696;
+
+  --accent: #303030;
+  --accent-foreground: #ffffff;
+
+  --destructive: #f13a2c;
+  --destructive-foreground: #ffffff;
+
+  --border: #303030;
+  --input: #181818;
+  --ring: #da291c;
+
+  --brand: #da291c;
+  --brand-2: #da291c;
+  --success: #03904a;
+  --warning: #f13a2c;
+
+  /* Ferrari spacing ladder */
+  --space-xxxs: 4px;
+  --space-xxs: 8px;
+  --space-xs: 16px;
+  --space-sm: 24px;
+  --space-md: 32px;
+  --space-lg: 48px;
+  --space-xl: 64px;
+  --space-xxl: 96px;
+  --space-super: 128px;
+
+  --gradient-brand: linear-gradient(180deg, #a00c01, #da291c 64%);
+  --gradient-mesh: none;
+
+  --shadow-glass: 0 4px 8px rgba(0,0,0,0.1);
+  --shadow-glow: none;
+}
+
+.dark {
+  --background: #181818;
+  --foreground: #ffffff;
+}
+
+
+@layer base {
+  * { border-color: var(--color-border); }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Ferrari sharp-corner override: flatten every rounded-* utility except .rounded-full (reserved for badges/dots). */
+  [class*="rounded-"]:not(.rounded-full) {
+    border-radius: 0 !important;
+  }
+}
+
+
+/* Ferrari editorial utilities */
+@utility ferrari-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 32px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border-radius: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+@utility ferrari-cta-primary {
+  background-color: #da291c;
+  color: #ffffff;
+  &:hover { background-color: #b01e0a; }
+}
+
+@utility ferrari-cta-outline {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  &:hover { background-color: rgba(255,255,255,0.08); }
+}
+
+@utility caption-upper {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+@utility nav-link {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+@utility card-elevated {
+  background-color: #303030;
+  color: #ffffff;
+  border-radius: 0;
+}
+
+@utility hairline {
+  border: 1px solid #303030;
+}
+
+@utility gradient-text {
+  color: #ffffff;
+}
+
+@utility glow { box-shadow: none; }
+
+@utility glass {
+  background: #181818;
+  border: 1px solid #303030;
+}
+
+@utility glass-strong {
+  background: #181818;
+  border: 1px solid #303030;
+}
+
+
+
+@utility gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@utility animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@utility animate-float { animation: float 6s ease-in-out infinite; }
+
+@keyframes aurora-drift {
+  0%   { transform: translate3d(-4%, -2%, 0) scale(1); }
+  50%  { transform: translate3d(4%, 3%, 0) scale(1.08); }
+  100% { transform: translate3d(-4%, -2%, 0) scale(1); }
+}
+@utility animate-aurora { animation: aurora-drift 18s ease-in-out infinite; }
+
+@keyframes slide-in-up {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@utility animate-slide-in { animation: slide-in-up 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@utility animate-fade-in { animation: fade-in 0.4s ease-out both; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@utility animate-shimmer {
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.06), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.08); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: oklch(1 0 0 / 0.15); }
