@@ -24,9 +24,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Inspect build output
+        run: |
+          echo "=== .output/server contents ==="
+          ls -la .output/server
+          echo "=== wrangler.json ==="
+          cat .output/server/wrangler.json || echo "wrangler.json not found"
+
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: .output/server
-          command: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_LOG: debug
+        run: npx wrangler deploy .output/server --log-level debug
