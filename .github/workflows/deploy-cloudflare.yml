@@ -34,6 +34,16 @@ jobs:
       - name: Clean conflicting deploy config
         run: rm -rf .wrangler/deploy/config.json
 
+      - name: Ensure workers.dev deployment
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = '.output/server/wrangler.json';
+            const config = JSON.parse(fs.readFileSync(path, 'utf8'));
+            config.workers_dev = true;
+            fs.writeFileSync(path, JSON.stringify(config, null, 2));
+          "
+
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
